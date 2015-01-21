@@ -11,21 +11,35 @@ angular.module('App')
   .service('StorageService', [function StorageService() {
     return {
       debug: false,
-      lget: function(key) {
-        return localStorage.getItem(key);
+      lget: function(key, json) {
+        var value = localStorage.getItem(key);
+        if(json) {
+          value = JSON.parse(value);
+        }
+        return value;
       },
-      sget: function(key) {
-        return sessionStorage.getItem(key);
+      sget: function(key, json) {
+        var value = sessionStorage.getItem(key);
+        if(json) {
+          value = JSON.parse(value);
+        }
+        return value;
       },
-      lset: function(key, value) {
-        if(this.get(key) && this.debug) {
+      lset: function(key, value, json) {
+        if(this.lget(key) && this.debug) {
           console.warn('Key "' + key + '" already exists, replacing with ' + value);
+        }
+        if(json) {
+          value = JSON.stringify(value);
         }
         localStorage.setItem(key, value);
       },
-      sset: function(key, value) {
-        if(this.get(key) && this.debug) {
+      sset: function(key, value, json) {
+        if(this.sget(key) && this.debug) {
           console.warn('Key "' + key + '" already exists, replacing with ' + value);
+        }
+        if(json) {
+          value = JSON.stringify(value);
         }
         sessionStorage.setItem(key, value);
       },
