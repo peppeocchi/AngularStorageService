@@ -12,3 +12,7 @@ Wrapper for HTML5 local & session storage
     StorageService.lget('playlist');
 
     StorageService.sget('authtoken');
+
+### License
+
+[MIT license](http://opensource.org/licenses/MIT)
