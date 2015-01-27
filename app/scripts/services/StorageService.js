@@ -68,13 +68,6 @@ angular.module('App')
       | @return string|object|undefined
       */
       lget: function(key, json) {
-        /*var value = localStorage.getItem(key);
-        if(json && value) {
-          try {
-            value = JSON.parse(value);
-          } catch(e) {}
-        }
-        return value;*/
         return this.get('localStorage', key, json);
       },
 
@@ -87,13 +80,6 @@ angular.module('App')
       | @return string|object|undefined
       */
       sget: function(key, json) {
-        /*var value = sessionStorage.getItem(key);
-        if(json && value) {
-          try {
-            value = JSON.parse(value);
-          } catch(e) {}
-        }
-        return value;*/
         return this.get('sessionStorage', key, json);
       },
 
