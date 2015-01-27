@@ -60,6 +60,31 @@ angular.module('App')
       },
 
       /*
+      | Set a key/value in web storage
+      |
+      | @param (string) key - the key to set
+      | @param (string) value - the value to set
+      | @param (bool) json - if true will convert the value to a string
+      */
+      set: function(type, key, value, json) {
+        if(['localStorage', 'sessionStorage'].indexOf(type) === -1) {
+          throw {
+            StorageTypeException: 'The storage type can be localStorage or sessionStorage.'
+          };
+        }
+        var webStorage = window[type];
+        if(webStorage.getItem(key) && this.debug) {
+          console.warn('Key "' + key + '" already exists, replacing with ' + value);
+        }
+        if(json) {
+          try {
+            value = JSON.stringify(value);
+          } catch(e) {}
+        }
+        webStorage.setItem(key, value);
+      },
+
+      /*
       | Get from local storage
       |
       | @param (string) key - the key to get
@@ -91,15 +116,7 @@ angular.module('App')
       | @param (bool) json - if true will convert the value to a string
       */
       lset: function(key, value, json) {
-        if(this.lget(key) && this.debug) {
-          console.warn('Key "' + key + '" already exists, replacing with ' + value);
-        }
-        if(json) {
-          try {
-            value = JSON.stringify(value);
-          } catch(e) {}
-        }
-        localStorage.setItem(key, value);
+        this.set('localStorage', key, value, json);
       },
 
       /*
@@ -110,15 +127,7 @@ angular.module('App')
       | @param (bool) json - if true will convert the value to a string
       */
       sset: function(key, value, json) {
-        if(this.sget(key) && this.debug) {
-          console.warn('Key "' + key + '" already exists, replacing with ' + value);
-        }
-        if(json) {
-          try {
-            value = JSON.stringify(value);
-          } catch(e) {}
-        }
-        sessionStorage.setItem(key, value);
+        this.set('sessionStorage', key, value, json);
       },
 
       /*
@@ -147,7 +156,7 @@ angular.module('App')
       |
       | @return bool
       */
-      ldel: function(key, check) {
+      lremove: function(key, check) {
         if(check) {
           if(!this.lget(key)) {
             if(this.debug) {
@@ -168,7 +177,7 @@ angular.module('App')
       |
       | @return bool
       */
-      sdel: function(key, check) {
+      sremove: function(key, check) {
         if(check) {
           if(!this.sget(key)) {
             if(this.debug) {
