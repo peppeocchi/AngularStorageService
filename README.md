@@ -15,6 +15,7 @@ Wrapper for HTML5 local & session storage
 
 #### Real world example
 
+```javascript
     app.controller('AppCtrl', ['$scope', 'StorageService', function($scope, StorageService) {
       ...
       $scope.playlist = [
@@ -66,6 +67,7 @@ Wrapper for HTML5 local & session storage
         StorageService.empty();
       }
     }]);
+```
 
 ### License
 
