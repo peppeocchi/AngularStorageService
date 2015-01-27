@@ -34,6 +34,32 @@ angular.module('App')
       },
 
       /*
+      | Get from web storage
+      |
+      | @param (string) type - localStorage || sessionStorage
+      | @param (string) key - the key to get
+      | @param (bool) json - if true will parse the value for the provided key
+      |
+      | @return string|object|undefined
+      */
+      get: function(type, key, json) {
+        if(['localStorage', 'sessionStorage'].indexOf(type) === -1) {
+          throw {
+            StorageTypeException: 'The storage type can be localStorage or sessionStorage.'
+          };
+        }
+        var webStorage = window[type],
+            value = webStorage.getItem(key);
+        if(value && json) {
+          try {
+            value = JSON.parse(value);
+          } catch(e) {}
+        }
+
+        return value;
+      },
+
+      /*
       | Get from local storage
       |
       | @param (string) key - the key to get
@@ -42,11 +68,14 @@ angular.module('App')
       | @return string|object|undefined
       */
       lget: function(key, json) {
-        var value = localStorage.getItem(key);
+        /*var value = localStorage.getItem(key);
         if(json && value) {
-          value = JSON.parse(value);
+          try {
+            value = JSON.parse(value);
+          } catch(e) {}
         }
-        return value;
+        return value;*/
+        return this.get('localStorage', key, json);
       },
 
       /*
@@ -58,11 +87,14 @@ angular.module('App')
       | @return string|object|undefined
       */
       sget: function(key, json) {
-        var value = sessionStorage.getItem(key);
+        /*var value = sessionStorage.getItem(key);
         if(json && value) {
-          value = JSON.parse(value);
+          try {
+            value = JSON.parse(value);
+          } catch(e) {}
         }
-        return value;
+        return value;*/
+        return this.get('sessionStorage', key, json);
       },
 
       /*
@@ -77,7 +109,9 @@ angular.module('App')
           console.warn('Key "' + key + '" already exists, replacing with ' + value);
         }
         if(json) {
-          value = JSON.stringify(value);
+          try {
+            value = JSON.stringify(value);
+          } catch(e) {}
         }
         localStorage.setItem(key, value);
       },
@@ -94,7 +128,9 @@ angular.module('App')
           console.warn('Key "' + key + '" already exists, replacing with ' + value);
         }
         if(json) {
-          value = JSON.stringify(value);
+          try {
+            value = JSON.stringify(value);
+          } catch(e) {}
         }
         sessionStorage.setItem(key, value);
       },
