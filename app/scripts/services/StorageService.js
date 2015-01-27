@@ -10,6 +10,16 @@
 angular.module('App')
   .service('StorageService', [function StorageService() {
 
+    var getStorage = function(type) {
+      if(['localStorage', 'sessionStorage'].indexOf(type) === -1) {
+        throw {
+          StorageTypeException: 'The storage type can be localStorage or sessionStorage.'
+        };
+      }
+
+      return window[type];
+    };
+
     return {
 
       /*
@@ -43,12 +53,7 @@ angular.module('App')
       | @return string|object|undefined
       */
       get: function(type, key, json) {
-        if(['localStorage', 'sessionStorage'].indexOf(type) === -1) {
-          throw {
-            StorageTypeException: 'The storage type can be localStorage or sessionStorage.'
-          };
-        }
-        var webStorage = window[type],
+        var webStorage = getStorage(type),
             value = webStorage.getItem(key);
         if(value && json) {
           try {
@@ -67,12 +72,7 @@ angular.module('App')
       | @param (bool) json - if true will convert the value to a string
       */
       set: function(type, key, value, json) {
-        if(['localStorage', 'sessionStorage'].indexOf(type) === -1) {
-          throw {
-            StorageTypeException: 'The storage type can be localStorage or sessionStorage.'
-          };
-        }
-        var webStorage = window[type];
+        var webStorage = getStorage(type);
         if(webStorage.getItem(key) && this.debug) {
           console.warn('Key "' + key + '" already exists, replacing with ' + value);
         }
@@ -93,12 +93,7 @@ angular.module('App')
       | @return bool
       */
       remove: function(type, key, check) {
-        if(['localStorage', 'sessionStorage'].indexOf(type) === -1) {
-          throw {
-            StorageTypeException: 'The storage type can be localStorage or sessionStorage.'
-          };
-        }
-        var webStorage = window[type];
+        var webStorage = getStorage(type);
         if(check) {
           if(!webStorage.getItem(key)) {
             if(this.debug) {
