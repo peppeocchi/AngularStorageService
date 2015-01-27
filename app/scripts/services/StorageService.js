@@ -85,6 +85,33 @@ angular.module('App')
       },
 
       /*
+      | Remove a key from web storage
+      |
+      | @param (string) key - the key to set
+      | @param (bool) check - if true it doesn't remove the key if already exists (and return false)
+      |
+      | @return bool
+      */
+      remove: function(type, key, check) {
+        if(['localStorage', 'sessionStorage'].indexOf(type) === -1) {
+          throw {
+            StorageTypeException: 'The storage type can be localStorage or sessionStorage.'
+          };
+        }
+        var webStorage = window[type];
+        if(check) {
+          if(!webStorage.getItem(key)) {
+            if(this.debug) {
+              console.warn('Key ' + key + ' doesn\'t exists');
+            }
+            return false;
+          }
+        }
+        webStorage.removeItem(key);
+        return true;
+      },
+
+      /*
       | Get from local storage
       |
       | @param (string) key - the key to get
@@ -157,16 +184,7 @@ angular.module('App')
       | @return bool
       */
       lremove: function(key, check) {
-        if(check) {
-          if(!this.lget(key)) {
-            if(this.debug) {
-              console.warn('Key ' + key + ' doesn\'t exists');
-            }
-            return false;
-          }
-        }
-        localStorage.removeItem(key);
-        return true;
+        return this.remove('localStorage', key, check);
       },
 
       /*
@@ -178,16 +196,7 @@ angular.module('App')
       | @return bool
       */
       sremove: function(key, check) {
-        if(check) {
-          if(!this.sget(key)) {
-            if(this.debug) {
-              console.warn('Key ' + key + ' doesn\'t exists');
-            }
-            return false;
-          }
-        }
-        sessionStorage.removeItem(key);
-        return true;
+        return this.remove('sessionStorage', key, check);
       },
 
       /*
