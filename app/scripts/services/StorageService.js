@@ -201,7 +201,7 @@ angular.module('App')
       */
       lkeys: function() {
         var keys = [];
-        for(v in localStorage) {
+        for(var v in localStorage) {
           keys.push(v);
         }
 
@@ -215,7 +215,7 @@ angular.module('App')
       */
       skeys: function() {
         var keys = [];
-        for(v in sessionStorage) {
+        for(var v in sessionStorage) {
           keys.push(v);
         }
 
@@ -226,8 +226,7 @@ angular.module('App')
       | Removes all the registered keys from local storage
       */
       lempty: function() {
-        var keys = this.lkeys;
-        for(v in localStorage) {
+        for(var v in localStorage) {
           this.ldel(v);
         }
       },
@@ -236,8 +235,7 @@ angular.module('App')
       | Removes all the registered keys from session storage
       */
       sempty: function() {
-        var keys = this.lkeys;
-        for(v in sessionStorage) {
+        for(var v in sessionStorage) {
           this.ldel(v);
         }
       },
